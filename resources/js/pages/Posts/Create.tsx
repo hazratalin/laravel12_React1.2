@@ -48,7 +48,7 @@ export default function PostCreate() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Post Create" />
-            
+
             <section className="mx-auto max-w-md rounded-lg bg-gray-100 p-4 dark:bg-gray-900">
                 <form className="flex flex-col gap-6" onSubmit={submit}>
                     <div className="grid gap-6">

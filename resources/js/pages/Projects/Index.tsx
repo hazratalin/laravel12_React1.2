@@ -58,7 +58,11 @@ type Props = {
 /* ----------------------------------
    Component
 -----------------------------------*/
-export default function Index({ projects, queryParams = {} }: Props) {
+// export default function Index({ projects, queryParams = {} }: Props) {
+export default function Index({ projects, queryParams }: { projects: PaginatedProjects; queryParams?: Record<string, any> }) {
+    // Ensure it's always an object
+    queryParams = queryParams || {};
+
     const { flash } = usePage<{ flash: Flash }>().props;
 
     /* ----------------------------------
@@ -266,7 +270,7 @@ export default function Index({ projects, queryParams = {} }: Props) {
 
                                             <TableCell>
                                                 <img
-                                                    src={project.image_path}
+                                                    src={project.image_path || '/images/fallback.jpg'}
                                                     onError={(e) => (e.currentTarget.src = '/images/fallback.jpg')}
                                                     className="h-10 w-10 rounded-full object-cover"
                                                 />

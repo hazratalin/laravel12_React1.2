@@ -1,6 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, useForm, Link, usePage, router } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
@@ -10,15 +10,13 @@ import { Label } from '@/components/ui/label';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler, useState } from 'react';
 
-
 import { ArrowBigLeft } from 'lucide-react';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
 
-
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'User Create',
+        title: 'Create a new account',
         href: '/users',
     },
 ];
@@ -29,10 +27,7 @@ type UserForm = {
     password: string;
     image: File | null;
     roles: string[];
-
-
 };
-
 
 interface Flash {
     success?: string;
@@ -51,7 +46,6 @@ export default function Create({ roles }: CreateProps) {
         password: '',
         image: null,
         roles: [],
-
     });
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,7 +55,6 @@ export default function Create({ roles }: CreateProps) {
             setImagePreview(URL.createObjectURL(file)); // 👈 generate preview URL
         }
     };
-
 
     function handleCheckboxChange(roleName: string, checked: boolean) {
         if (checked) {
@@ -82,7 +75,6 @@ export default function Create({ roles }: CreateProps) {
         }
     }, [flash.success]);
 
-
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post(route('users.store'));
@@ -93,7 +85,6 @@ export default function Create({ roles }: CreateProps) {
             <Head title="User Create" />
 
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-
                 <div className="flex justify-end">
                     <Link
                         href={route('users.index')}
@@ -106,11 +97,7 @@ export default function Create({ roles }: CreateProps) {
 
                 {/* <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min"> */}
 
-
-
-
                 <section className="mx-auto max-w-md rounded-lg bg-gray-100 p-4 dark:bg-gray-900">
-
                     <form className="flex flex-col gap-6" onSubmit={submit}>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
@@ -191,8 +178,6 @@ export default function Create({ roles }: CreateProps) {
                 </section>
 
                 {/* </div> */}
-
-
             </div>
         </AppLayout>
     );

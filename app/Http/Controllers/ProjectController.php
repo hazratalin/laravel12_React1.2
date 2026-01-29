@@ -31,10 +31,11 @@ class ProjectController extends Controller
         ->paginate(8)
         ->onEachSide(1);
        
-        return Inertia::render('Projects/Index',[
-            'projects' => ProjectResource::collection($projects),
-            'queryParams' => request()->query() ?: null,
-        ]);
+     return Inertia::render('Projects/Index', [
+    'projects' => ProjectResource::collection($projects),
+    'queryParams' => request()->query() ?: [], // <-- always an array
+]);
+
     }
 
     /**
