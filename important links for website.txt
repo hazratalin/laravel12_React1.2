@@ -2,3 +2,4 @@ https://color.adobe.com/create/color-wheel
 https://app.diagrams.net/
 https://ui.shadcn.com/docs/components/radix/textarea
 https://inertiajs.com/docs/v2/the-basics/forms
+https://lucide.dev/icons/

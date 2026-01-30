@@ -19,9 +19,9 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 type PostForm = {
-    title: string;
-    content: string;
-    image: File | null;
+    title?: string;
+    content?: string;
+    image?: File | null;
 };
 
 export default function PostCreate() {

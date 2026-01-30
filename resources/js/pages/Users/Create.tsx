@@ -104,7 +104,7 @@ export default function Create({ roles }: CreateProps) {
                                 <Label htmlFor="name">Name</Label>
                                 <Input
                                     id="name"
-                                    type="name"
+                                    type="text"
                                     value={data.name}
                                     onChange={(e) => setData('name', e.target.value)}
                                     placeholder="Enter Name"
