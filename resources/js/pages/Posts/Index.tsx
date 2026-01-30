@@ -1,11 +1,11 @@
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import Pagination from '@/components/pagination';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import { Pencil, Plus, Search, Trash2, X } from 'lucide-react';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
-import Pagination from '@/components/pagination';
 import Swal from 'sweetalert2';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -44,7 +44,7 @@ interface Flash {
 }
 
 export default function PostIndex({ posts, filters }: { posts: PostsPaginated; filters: { search?: string } }) {
-    const { data, setData, get } = useForm({
+    const { processing, data, setData, get } = useForm({
         search: filters.search || '',
     });
 
@@ -64,10 +64,10 @@ export default function PostIndex({ posts, filters }: { posts: PostsPaginated; f
         }
     }, [flash.success]);
 
-    const handleDelete = (postId: number) => {
+    const handleDelete = (id: number, title: string) => {
         Swal.fire({
             title: 'Are you sure?',
-            text: 'This post will be permanently deleted!',
+            text: `This post id - ${id} will be permanently deleted!`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
@@ -75,9 +75,9 @@ export default function PostIndex({ posts, filters }: { posts: PostsPaginated; f
             confirmButtonText: 'Yes, delete it!',
         }).then((result) => {
             if (result.isConfirmed) {
-                router.delete(route('posts.destroy', postId), {
+                router.delete(route('posts.destroy', id), {
                     onSuccess: () => {
-                        Swal.fire('Deleted!', 'The post has been deleted.', 'success');
+                        Swal.fire('Deleted!', `The post "${title}" has been deleted.`, 'success');
                     },
                 });
             }
@@ -88,8 +88,8 @@ export default function PostIndex({ posts, filters }: { posts: PostsPaginated; f
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Posts" />
 
-      <style>
-        {`
+            <style>
+                {`
           @keyframes gradientAnimation {
             0% {
               background-position: 0% 50%;
@@ -112,11 +112,7 @@ export default function PostIndex({ posts, filters }: { posts: PostsPaginated; f
             transition: background 0.3s ease;
           }
         `}
-      </style>
-
-
-
-
+            </style>
 
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex justify-end">
@@ -143,13 +139,13 @@ export default function PostIndex({ posts, filters }: { posts: PostsPaginated; f
                             )}
                         </div>
 
-                           <button
-        type="submit"
-        className="animated-gradient inline-flex items-center gap-1 rounded px-3 py-1 text-sm text-white hover:brightness-110 transition-all duration-200"
-      >
-        <Search className="h-4 w-4" />
-        Search
-      </button>
+                        <button
+                            type="submit"
+                            className="animated-gradient inline-flex items-center gap-1 rounded px-3 py-1 text-sm text-white transition-all duration-200 hover:brightness-110"
+                        >
+                            <Search className="h-4 w-4" />
+                            Search
+                        </button>
                         {/* <button
                             type="submit"
                             className="inline-flex items-center gap-1 rounded bg-indigo-600 px-3 py-1 text-sm text-white hover:bg-indigo-700"
@@ -174,7 +170,7 @@ export default function PostIndex({ posts, filters }: { posts: PostsPaginated; f
                             <TableRow>
                                 <TableHead className="w-[100px]">ID</TableHead>
                                 <TableHead>Title</TableHead>
-                                <TableHead>Thumbnail</TableHead>
+                                <TableHead>Image</TableHead>
                                 <TableHead className="text-right">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -203,8 +199,9 @@ export default function PostIndex({ posts, filters }: { posts: PostsPaginated; f
                                         </Link>
 
                                         <button
-                                            onClick={() => handleDelete(post.id)}
-                                            className="inline-flex cursor-pointer items-center text-red-500 hover:text-red-600"
+                                            disabled={processing}
+                                            onClick={() => handleDelete(post.id, post.title)}
+                                            className="inline-flex cursor-pointer items-center text-red-500 hover:text-red-700"
                                         >
                                             <Trash2 className="mr-1 h-4 w-4" />
                                             Delete
