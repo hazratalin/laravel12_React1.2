@@ -113,7 +113,7 @@ export default function PostEdit({ currentPost }: { currentPost: Post }) {
                             </div>
 
                             {/* Submit */}
-                            <Button type="submit" className="mt-4 w-full" disabled={processing}>
+                            <Button disabled={processing} type="submit" className="mt-4 w-full" tabIndex={4}>
                                 {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                                 Update
                             </Button>
