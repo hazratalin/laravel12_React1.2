@@ -6,13 +6,13 @@ import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from '@/constants';
 import AppLayout from '@/layouts/app-layout';
 import { can } from '@/lib/can';
 import { type BreadcrumbItem } from '@/types';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/16/solid';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import { useEffect } from 'react';
 import { BsArrowDown, BsArrowsExpand, BsArrowUp } from 'react-icons/bs';
 import { toast } from 'sonner';
 import Swal from 'sweetalert2';
-
 /* ----------------------------------
    Breadcrumbs
 -----------------------------------*/
@@ -162,6 +162,7 @@ export default function Index({ projects, queryParams }: { projects: PaginatedPr
                     )}
                 </div>
 
+                {/* <pre>{JSON.stringify(projects, null, 2)}</pre> */}
                 <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
                     <div className="overflow-x-auto">
                         <Table>
@@ -170,9 +171,17 @@ export default function Index({ projects, queryParams }: { projects: PaginatedPr
                             {/* ---------- Headers ---------- */}
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead className="w-[50px] cursor-pointer" onClick={() => sortChanged('id')}>
+                                    <TableHead
+                                        className="flex cursor-pointer items-center justify-between gap-1 px-3 py-3"
+                                        onClick={() => sortChanged('id')}
+                                    >
                                         ID
+                                        <div>
+                                            <ChevronUpIcon className="w-4" />
+                                            <ChevronDownIcon className="-mt-2 w-4" />
+                                        </div>
                                     </TableHead>
+                                    {/* npm install @heroicons/react -s */}
                                     <TableHead>Image</TableHead>
 
                                     {/* <TableHead className="w-[250px] cursor-pointer" onClick={() => sortChanged('name')}>
@@ -183,7 +192,10 @@ export default function Index({ projects, queryParams }: { projects: PaginatedPr
                                         Status
                                     </TableHead> */}
 
-                                    <TableHead onClick={() => sortChanged('name')} className="flex cursor-pointer items-center gap-1 text-left">
+                                    <TableHead
+                                        onClick={() => sortChanged('name')}
+                                        className="flex cursor-pointer items-center gap-1 text-left hover:text-indigo-600"
+                                    >
                                         Name
                                         {queryParams.sort_field === 'name' ? (
                                             queryParams.sort_direction === 'asc' ? (
@@ -207,10 +219,10 @@ export default function Index({ projects, queryParams }: { projects: PaginatedPr
                                             </span>
                                         </div>
                                     </TableHead>
-                                    <TableHead className="cursor-pointer" onClick={() => sortChanged('created_at')}>
+                                    <TableHead className="cursor-pointer hover:text-indigo-600" onClick={() => sortChanged('created_at')}>
                                         Created
                                     </TableHead>
-                                    <TableHead className="cursor-pointer" onClick={() => sortChanged('due_date')}>
+                                    <TableHead className="cursor-pointer hover:text-indigo-600" onClick={() => sortChanged('due_date')}>
                                         Due
                                     </TableHead>
                                     <TableHead>Created By</TableHead>
@@ -286,9 +298,22 @@ export default function Index({ projects, queryParams }: { projects: PaginatedPr
                                                 </span>
                                             </TableCell>
 
-                                            <TableCell>{new Date(project.created_at).toLocaleDateString()}</TableCell>
+                                            {/* <TableCell className="text-nowrap">{new Date(project.created_at).toLocaleDateString()}</TableCell> */}
+                                            <TableCell className="text-nowrap">
+                                                {new Date(project.created_at).toLocaleDateString('en-US', {
+                                                    year: 'numeric',
+                                                    month: 'short',
+                                                    day: '2-digit',
+                                                })}
+                                            </TableCell>
 
-                                            <TableCell>{new Date(project.due_date).toLocaleDateString()}</TableCell>
+                                            <TableCell className="text-nowrap">
+                                                {new Date(project.due_date).toLocaleDateString('en-US', {
+                                                    year: 'numeric',
+                                                    month: 'short',
+                                                    day: '2-digit',
+                                                })}
+                                            </TableCell>
 
                                             <TableCell>{project.created_by.name}</TableCell>
 
