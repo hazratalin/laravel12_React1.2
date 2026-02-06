@@ -1,4 +1,5 @@
 import Pagination from '@/components/pagination';
+import TableHeading from '@/components/TableHeading';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -10,7 +11,6 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/16/solid';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
 import { useEffect } from 'react';
-import { BsArrowDown, BsArrowsExpand, BsArrowUp } from 'react-icons/bs';
 import { toast } from 'sonner';
 import Swal from 'sweetalert2';
 /* ----------------------------------
@@ -171,59 +171,54 @@ export default function Index({ projects, queryParams }: { projects: PaginatedPr
                             {/* ---------- Headers ---------- */}
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead
-                                        className="flex cursor-pointer items-center justify-between gap-1 px-3 py-3"
-                                        onClick={() => sortChanged('id')}
-                                    >
-                                        ID
-                                        <div>
-                                            <ChevronUpIcon className="w-4" />
-                                            <ChevronDownIcon className="-mt-2 w-4" />
+                                    {/* npm install @heroicons/react -s */}
+                                    <TableHead onClick={() => sortChanged('id')}>
+                                        <div className="flex cursor-pointer items-center justify-between gap-1 px-3 py-3">
+                                            ID
+                                            <div>
+                                                <ChevronUpIcon className="w-4" />
+                                                <ChevronDownIcon className="-mt-2 w-4" />
+                                            </div>
                                         </div>
                                     </TableHead>
-                                    {/* npm install @heroicons/react -s */}
+
                                     <TableHead>Image</TableHead>
 
-                                    {/* <TableHead className="w-[250px] cursor-pointer" onClick={() => sortChanged('name')}>
-                                        Name
-                                    </TableHead> */}
-
-                                    {/* <TableHead className="cursor-pointer" onClick={() => sortChanged('status')}>
-                                        Status
-                                    </TableHead> */}
-
-                                    <TableHead
-                                        onClick={() => sortChanged('name')}
-                                        className="flex cursor-pointer items-center gap-1 text-left hover:text-indigo-600"
-                                    >
-                                        Name
-                                        {queryParams.sort_field === 'name' ? (
-                                            queryParams.sort_direction === 'asc' ? (
-                                                <BsArrowUp className="h-3 w-3 text-indigo-600" />
-                                            ) : (
-                                                <BsArrowDown className="h-3 w-3 text-indigo-600" />
-                                            )
-                                        ) : (
-                                            <BsArrowsExpand className="h-3 w-3 text-gray-400" />
-                                        )}
-                                    </TableHead>
-
-                                    <TableHead
-                                        onClick={() => sortChanged('status')}
-                                        className="cursor-pointer text-center text-sm font-medium select-none hover:text-indigo-600"
-                                    >
-                                        <div className="flex items-center justify-center gap-1">
-                                            Status
-                                            <span className="text-xs text-gray-400">
-                                                {queryParams.sort_field === 'status' ? (queryParams.sort_direction === 'asc' ? '▲' : '▼') : '↕'}
-                                            </span>
+                                    <TableHead onClick={() => sortChanged('name')}>
+                                        <div className="flex cursor-pointer items-center justify-between gap-1 px-3 py-3">
+                                            Name
+                                            <div>
+                                                <ChevronUpIcon className="w-4" />
+                                                <ChevronDownIcon className="-mt-2 w-4" />
+                                            </div>
                                         </div>
                                     </TableHead>
-                                    <TableHead className="cursor-pointer hover:text-indigo-600" onClick={() => sortChanged('created_at')}>
-                                        Created
+                                    <TableHeading
+                                        name="status"
+                                        sort_field={queryParams.sort_field}
+                                        sort_direction={queryParams.sort_direction}
+                                        sortChanged={sortChanged}
+                                    >
+                                        Status
+                                    </TableHeading>
+
+                                    <TableHead onClick={() => sortChanged('created_at')}>
+                                        <div className="flex cursor-pointer items-center justify-between gap-1 px-3 py-3">
+                                            Created
+                                            <div>
+                                                <ChevronUpIcon className="w-4" />
+                                                <ChevronDownIcon className="-mt-2 w-4" />
+                                            </div>
+                                        </div>
                                     </TableHead>
-                                    <TableHead className="cursor-pointer hover:text-indigo-600" onClick={() => sortChanged('due_date')}>
-                                        Due
+                                    <TableHead onClick={() => sortChanged('due_date')}>
+                                        <div className="flex cursor-pointer items-center justify-between gap-1 px-3 py-3">
+                                            Due
+                                            <div>
+                                                <ChevronUpIcon className="w-4" />
+                                                <ChevronDownIcon className="-mt-2 w-4" />
+                                            </div>
+                                        </div>
                                     </TableHead>
                                     <TableHead>Created By</TableHead>
                                     <TableHead className="text-right">Actions</TableHead>
