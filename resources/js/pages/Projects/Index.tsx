@@ -184,15 +184,14 @@ export default function Index({ projects, queryParams }: { projects: PaginatedPr
 
                                     <TableHead>Image</TableHead>
 
-                                    <TableHead onClick={() => sortChanged('name')}>
-                                        <div className="flex cursor-pointer items-center justify-between gap-1 px-3 py-3">
-                                            Name
-                                            <div>
-                                                <ChevronUpIcon className="w-4" />
-                                                <ChevronDownIcon className="-mt-2 w-4" />
-                                            </div>
-                                        </div>
-                                    </TableHead>
+                                    <TableHeading
+                                        name="name"
+                                        sort_field={queryParams.sort_field}
+                                        sort_direction={queryParams.sort_direction}
+                                        sortChanged={sortChanged}
+                                    >
+                                        Name
+                                    </TableHeading>
                                     <TableHeading
                                         name="status"
                                         sort_field={queryParams.sort_field}
@@ -202,24 +201,23 @@ export default function Index({ projects, queryParams }: { projects: PaginatedPr
                                         Status
                                     </TableHeading>
 
-                                    <TableHead onClick={() => sortChanged('created_at')}>
-                                        <div className="flex cursor-pointer items-center justify-between gap-1 px-3 py-3">
-                                            Created
-                                            <div>
-                                                <ChevronUpIcon className="w-4" />
-                                                <ChevronDownIcon className="-mt-2 w-4" />
-                                            </div>
-                                        </div>
-                                    </TableHead>
-                                    <TableHead onClick={() => sortChanged('due_date')}>
-                                        <div className="flex cursor-pointer items-center justify-between gap-1 px-3 py-3">
-                                            Due
-                                            <div>
-                                                <ChevronUpIcon className="w-4" />
-                                                <ChevronDownIcon className="-mt-2 w-4" />
-                                            </div>
-                                        </div>
-                                    </TableHead>
+                                    <TableHeading
+                                        name="created_at"
+                                        sort_field={queryParams.sort_field}
+                                        sort_direction={queryParams.sort_direction}
+                                        sortChanged={sortChanged}
+                                    >
+                                        Created At
+                                    </TableHeading>
+                                    <TableHeading
+                                        name="due_date"
+                                        sort_field={queryParams.sort_field}
+                                        sort_direction={queryParams.sort_direction}
+                                        sortChanged={sortChanged}
+                                    >
+                                        Due Date
+                                    </TableHeading>
+
                                     <TableHead>Created By</TableHead>
                                     <TableHead className="text-right">Actions</TableHead>
                                 </TableRow>
