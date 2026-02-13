@@ -48,3 +48,14 @@ export interface Post {
     content: string;
     image: string;
 }
+
+export interface Project {
+    id: number;
+    name: string;
+    image_path?: string | null;
+    status?: string;
+    created_at?: string;
+    due_date?: string | null;
+    created_by?: { name?: string };
+    [key: string]: any;
+}

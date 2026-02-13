@@ -6,7 +6,7 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from '@/constants';
 import AppLayout from '@/layouts/app-layout';
 import { can } from '@/lib/can';
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem, type Project } from '@/types';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/16/solid';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
@@ -31,29 +31,12 @@ interface Flash {
     danger?: string;
 }
 
-interface Project {
-    id: number;
-    name: string;
-    image_path: string;
-    status: keyof typeof PROJECT_STATUS_TEXT_MAP;
-    created_at: string;
-    due_date: string;
-    created_by: {
-        name: string;
-    };
-}
-
 interface PaginatedProjects {
     data: Project[];
     meta: {
         links: any[];
     };
 }
-
-type Props = {
-    projects: PaginatedProjects;
-    queryParams?: Record<string, any>;
-};
 
 /* ----------------------------------
    Component
@@ -275,13 +258,15 @@ export default function Index({ projects, queryParams }: { projects: PaginatedPr
 
                                             <TableCell>
                                                 <img
-                                                    src={project.image_path || '/images/fallback.jpg'}
+                                                    src={project.image_url || '/images/fallback.jpg'}
                                                     onError={(e) => (e.currentTarget.src = '/images/fallback.jpg')}
                                                     className="h-10 w-10 rounded-full object-cover"
                                                 />
                                             </TableCell>
 
-                                            <TableCell>{project.name}</TableCell>
+                                            <TableCell className="hover:underline">
+                                                <Link href={route('projects.show', project.id)}>{project.name}</Link>
+                                            </TableCell>
 
                                             <TableCell>
                                                 <span
@@ -342,283 +327,3 @@ export default function Index({ projects, queryParams }: { projects: PaginatedPr
         </AppLayout>
     );
 }
-
-// import Pagination from '@/components/pagination';
-// import { Input } from '@/components/ui/input';
-// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-// import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-// import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from '@/constants';
-// import AppLayout from '@/layouts/app-layout';
-// import { can } from '@/lib/can';
-// import { type BreadcrumbItem } from '@/types';
-// import { Head, Link, router, usePage } from '@inertiajs/react';
-// import { Pencil, Plus, Trash2 } from 'lucide-react';
-// import { useEffect } from 'react';
-// import { toast } from 'sonner';
-// import Swal from 'sweetalert2';
-// // Breadcrumbs
-// const breadcrumbs: BreadcrumbItem[] = [
-//     {
-//         title: 'Projects',
-//         href: '/projects',
-//     },
-// ];
-
-// // Flash message interface
-// interface Flash {
-//     success?: string;
-//     danger?: string;
-// }
-
-// // Project interface
-// interface Project {
-//     id: number;
-//     name: string;
-//     image_path: string;
-//     status: string;
-//     created_at: string;
-//     due_date: string;
-//     created_by: {
-//         name: string;
-//     };
-// }
-
-// // Projects prop interface
-// interface PaginatedProjects {
-//     data: Project[];
-//     meta: {
-//         links: any[]; // You can type this more strictly if needed
-//     };
-// }
-
-// // Component
-// export default function Index({ projects, queryParams = null }: { projects: PaginatedProjects }) {
-//     queryParams = queryParams || {};
-//     const searchFieldChange = (name: string, value: string) => {
-//         if (value) {
-//             queryParams[name] = value;
-//         } else {
-//             delete queryParams[name];
-//         }
-
-//         router.get(route('projects.index'), queryParams);
-//     };
-
-//     const onKeyDownHandler = (name: string, e) => {
-//         if (e.key !== 'Enter') return;
-
-//         searchFieldChange(name, e.target.value);
-//     };
-
-//     const sortChanged = (name?: string) => {
-//         if (name === queryParams.sort_Field) {
-//             queryParams.sort_Direction = queryParams.sort_Direction === 'asc' ? 'desc' : 'asc';
-//         } else if (name) {
-//             queryParams.sort_Field = name;
-//             queryParams.sort_Direction = 'asc';
-//         }
-
-//         router.get(route('projects.index'), queryParams);
-//     };
-
-//     const { flash } = usePage<{ flash: Flash }>().props;
-
-//     // Handle flash messages
-//     useEffect(() => {
-//         if (flash.success) {
-//             toast.success(flash.success);
-//         } else if (flash.danger) {
-//             toast.error(flash.danger);
-//         }
-//     }, [flash]);
-
-//     // Delete handler
-//     const handleDelete = (id: number) => {
-//         Swal.fire({
-//             title: 'Are you sure?',
-//             text: 'This project will be permanently deleted!',
-//             icon: 'warning',
-//             showCancelButton: true,
-//             confirmButtonColor: '#d33',
-//             cancelButtonColor: '#3085d6',
-//             confirmButtonText: 'Yes, delete it!',
-//         }).then((result) => {
-//             if (result.isConfirmed) {
-//                 router.delete(route('projects.destroy', id), {
-//                     onSuccess: () => {
-//                         Swal.fire('Deleted!', 'The project has been deleted.', 'success');
-//                     },
-//                 });
-//             }
-//         });
-//     };
-
-//     return (
-//         <AppLayout breadcrumbs={breadcrumbs}>
-//             <Head title="Projects" />
-
-//             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-//                 <div className="flex justify-end">
-//                     {can('user-create') && (
-//                         <Link
-//                             href={route('users.create')}
-//                             className="inline-flex items-center gap-1.5 rounded bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white transition hover:bg-indigo-700"
-//                         >
-//                             <Plus className="h-3.5 w-3.5" />
-//                             Create Project
-//                         </Link>
-//                     )}
-//                 </div>
-
-//                 <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
-//                     <div className="overflow-x-auto">
-//                         <Table>
-//                             <TableCaption>A list of all Projects.</TableCaption>
-
-//                             <TableHeader>
-//                                 <TableRow>
-//                                     <TableHead onClick={(e) => sortChanged('id')} className="w-[50px]">
-//                                         ID
-//                                     </TableHead>
-//                                     <TableHead className="px-3 py-2">Image</TableHead>
-//                                     <TableHead onClick={(e) => sortChanged('name')} className="px-3 py-2">
-//                                         Name
-//                                     </TableHead>
-//                                     <TableHead onClick={(e) => sortChanged('status')} className="px-3 py-2">
-//                                         Status
-//                                     </TableHead>
-//                                     <TableHead onClick={(e) => sortChanged('created_at')} className="px-3 py-2">
-//                                         Created Date
-//                                     </TableHead>
-//                                     <TableHead onClick={(e) => sortChanged('due_date')} className="px-3 py-2">
-//                                         Due Date
-//                                     </TableHead>
-//                                     <TableHead className="px-3 py-2">Created By</TableHead>
-//                                     <TableHead onClick={(e) => sortChanged()} className="text-right">
-//                                         Actions
-//                                     </TableHead>
-//                                 </TableRow>
-//                             </TableHeader>
-
-//                             <TableHeader className="border-b-2 border-gray-500 bg-gray-50 text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
-//                                 <TableRow className="text-nowrap">
-//                                     <TableHead className="w-[50px]"> </TableHead>
-//                                     <TableHead className="px-3 py-2"></TableHead>
-//                                     <TableHead className="px-3 py-2">
-//                                         <Input
-//                                             className="bg-accent w-full"
-//                                             defaultValue={queryParams.name}
-//                                             placeholder="Project Name"
-//                                             onBlur={(e) => searchFiledChanged('name', e.target.value)}
-//                                             onKeyDown={(e) => onKeyDownHandler('name', e)}
-//                                         />
-//                                     </TableHead>
-
-//                                     <TableHead className="px-3 py-2">
-//                                         <Select
-//                                             defaultValue={queryParams.status || 'all'}
-//                                             onValueChange={(value) => searchFieldChange('status', value === 'all' ? '' : value)}
-//                                         >
-//                                             <SelectTrigger className="w-full">
-//                                                 <SelectValue placeholder="Select Status" />
-//                                             </SelectTrigger>
-//                                             <SelectContent>
-//                                                 <SelectItem value="all">Select Status</SelectItem>
-//                                                 <SelectItem value="Pending">Pending</SelectItem>
-//                                                 <SelectItem value="In_Progress">In Progress</SelectItem>
-//                                                 <SelectItem value="Completed">Completed</SelectItem>
-//                                             </SelectContent>
-//                                         </Select>
-//                                     </TableHead>
-//                                     {/* <TableHead className="px-3 py-2">
-//   <select
-//     className="w-full border rounded px-2 py-2 focus:outline-none focus:ring focus:ring-blue-300 bg-accent"
-//     defaultValue={queryParams.status}
-//     onChange={e => searchFieldChange('status', e.target.value)}
-
-//   >
-//     <option value="">Select Status</option>
-//     <option value="Pending">Pending</option>
-//     <option value="In_Progress">In Progress</option>
-//     <option value="Completed">Completed</option>
-//   </select>
-
-// </TableHead> */}
-
-//                                     <TableHead className="px-3 py-2"> </TableHead>
-//                                     <TableHead className="px-3 py-2"></TableHead>
-//                                     <TableHead className="px-3 py-2"></TableHead>
-//                                     <TableHead className="text-right"></TableHead>
-//                                 </TableRow>
-//                             </TableHeader>
-
-//                             <TableBody>
-//                                 {projects.data.length === 0 ? (
-//                                     <TableRow>
-//                                         <TableCell colSpan={8} className="py-4 text-center text-gray-500">
-//                                             No projects found.
-//                                         </TableCell>
-//                                     </TableRow>
-//                                 ) : (
-//                                     projects.data.map((project) => (
-//                                         <TableRow
-//                                             key={project.id}
-//                                             className="border-b bg-white transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
-//                                         >
-//                                             <TableCell className="font-medium">{project.id}</TableCell>
-
-//                                             <TableCell>
-//                                                 <img
-//                                                     src={project.image_path}
-//                                                     onError={(e) => {
-//                                                         e.currentTarget.src = '/images/fallback.jpg';
-//                                                     }}
-//                                                     alt={`Image for ${project.name}`}
-//                                                     title={project.name}
-//                                                     className="h-10 w-10 rounded-full object-cover transition-transform duration-500 ease-in-out hover:scale-150"
-//                                                 />
-//                                             </TableCell>
-
-//                                             <TableCell>{project.name}</TableCell>
-//                                             <TableCell>
-//                                                 <span
-//                                                     className={`rounded px-2 py-1 text-sm font-semibold text-white ${PROJECT_STATUS_CLASS_MAP[project.status]}`}
-//                                                 >
-//                                                     {PROJECT_STATUS_TEXT_MAP[project.status]}
-//                                                 </span>
-//                                             </TableCell>
-//                                             <TableCell className="text-nowrap">{new Date(project.created_at).toLocaleDateString()}</TableCell>
-//                                             <TableCell className="text-nowrap">{new Date(project.due_date).toLocaleDateString()}</TableCell>
-//                                             <TableCell>{project.created_by.name}</TableCell>
-
-//                                             <TableCell className="text-right whitespace-nowrap">
-//                                                 <Link
-//                                                     href={route('projects.edit', project.id)}
-//                                                     className="mr-4 inline-flex items-center text-indigo-500 hover:text-indigo-600"
-//                                                 >
-//                                                     <Pencil className="mr-1 h-4 w-4" />
-//                                                     Edit
-//                                                 </Link>
-
-//                                                 <button
-//                                                     onClick={() => handleDelete(project.id)}
-//                                                     className="inline-flex cursor-pointer items-center text-red-500 hover:text-red-600"
-//                                                 >
-//                                                     <Trash2 className="mr-1 h-4 w-4" />
-//                                                     Delete
-//                                                 </button>
-//                                             </TableCell>
-//                                         </TableRow>
-//                                     ))
-//                                 )}
-//                             </TableBody>
-//                         </Table>
-//                     </div>
-//                     <div className="p-4">
-//                         <Pagination links={projects.meta.links} />
-//                     </div>
-//                 </div>
-//             </div>
-//         </AppLayout>
-//     );
-// }

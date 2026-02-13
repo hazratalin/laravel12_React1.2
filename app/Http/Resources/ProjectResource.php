@@ -7,6 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProjectResource extends JsonResource
 {
+    public static $wrap = false;
     /**
      * Transform the resource into an array.
      *
@@ -15,17 +16,27 @@ class ProjectResource extends JsonResource
     public function toArray(Request $request): array
     {
         return 
-        [        
-            'id' => $this->id,
-            'name' => $this->name,
-            'description' => $this->description,
-            'created_at' => (new Carbon ($this->created_at))->format
-            ('Y-m-d'),
-            'due_date' => (new Carbon ($this->due_date))->format('Y-m-d'),
-            'status' => $this->status,
-            'image_path' => $this->image_path,
-            'created_by' => new UserResource($this->createdBy),
-            'updatedBy' => new UserResource($this->updatedBy),
+        [      
+             'id' => $this->id,
+        'name' => $this->name,
+        'description' => $this->description,
+        'status' => $this->status,
+        'created_by' => new UserResource($this->createdBy),
+        'created_at' => (new Carbon($this->created_at))->format('Y-m-d'),
+        'due_date' => (new Carbon($this->due_date))->format('Y-m-d'),
+        'image_url' => $this->image_path
+            ? asset('storage/' . $this->image_path)
+            : asset('images/fallback.jpg'),  
+            // 'id' => $this->id,
+            // 'name' => $this->name,
+            // 'description' => $this->description,
+            // 'created_at' => (new Carbon ($this->created_at))->format
+            // ('Y-m-d'),
+            // 'due_date' => (new Carbon ($this->due_date))->format('Y-m-d'),
+            // 'status' => $this->status,
+            // 'image_path' => $this->image_path,
+            // 'created_by' => new UserResource($this->createdBy),
+            // 'updatedBy' => new UserResource($this->updatedBy),
         ];
     }
 }
