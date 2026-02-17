@@ -18,7 +18,7 @@ export default function Show({ tasks, queryParams, project }: { project: Project
                     {/* 🔹 Cover Image */}
                     <div className="h-64 w-full overflow-hidden">
                         <img
-                            src={project.image_url}
+                            src={project.image_path || '/images/fallback.jpg'}
                             onError={(e) => (e.currentTarget.src = '/images/fallback.jpg')}
                             className="h-full w-full object-cover"
                         />

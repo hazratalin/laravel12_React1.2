@@ -125,6 +125,15 @@ export default function Index({ projects, queryParams }: { projects: PaginatedPr
         });
     };
 
+    const formatDate = (date?: string | null) => {
+        if (!date) return '';
+        return new Date(date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: '2-digit',
+        });
+    };
+
     /* ----------------------------------
        Render
     -----------------------------------*/
@@ -266,7 +275,7 @@ export default function Index({ projects, queryParams }: { projects: PaginatedPr
 
                                             <TableCell>
                                                 <img
-                                                    src={project.image_url || '/images/fallback.jpg'}
+                                                    src={project.image_path || '/images/fallback.jpg'}
                                                     onError={(e) => (e.currentTarget.src = '/images/fallback.jpg')}
                                                     className="h-10 w-10 rounded-full object-cover"
                                                 />
@@ -284,24 +293,10 @@ export default function Index({ projects, queryParams }: { projects: PaginatedPr
                                                 </span>
                                             </TableCell>
 
-                                            {/* <TableCell className="text-nowrap">{new Date(project.created_at).toLocaleDateString()}</TableCell> */}
-                                            <TableCell className="text-nowrap">
-                                                {new Date(project.created_at).toLocaleDateString('en-US', {
-                                                    year: 'numeric',
-                                                    month: 'short',
-                                                    day: '2-digit',
-                                                })}
-                                            </TableCell>
+                                            <TableCell className="text-nowrap">{formatDate(project.created_at)}</TableCell>
+                                            <TableCell className="text-nowrap">{formatDate(project.due_date)}</TableCell>
 
-                                            <TableCell className="text-nowrap">
-                                                {new Date(project.due_date).toLocaleDateString('en-US', {
-                                                    year: 'numeric',
-                                                    month: 'short',
-                                                    day: '2-digit',
-                                                })}
-                                            </TableCell>
-
-                                            <TableCell>{project.created_by.name}</TableCell>
+                                            <TableCell>{project.created_by?.name ?? '—'}</TableCell>
 
                                             <TableCell className="space-x-4 text-right">
                                                 <Link
