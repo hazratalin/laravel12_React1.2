@@ -8,6 +8,13 @@ use App\Http\Requests\UpdateProjectRequest;
 use Inertia\Inertia;
 use App\Http\Resources\ProjectResource;
 use App\Http\Resources\TaskResource;
+use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
+
 
 class ProjectController extends Controller
 {
@@ -21,23 +28,22 @@ class ProjectController extends Controller
         $sortField = request("sort_field") ?? 'created_at';
         $sortDirection = request("sort_direction") ?? 'desc';
 
-        if(request("name")){
-            $query->where('name', 'like', '%'.request("name").'%');
+        if (request("name")) {
+            $query->where('name', 'like', '%' . request("name") . '%');
         }
 
-        if(request("status")){
+        if (request("status")) {
             $query->where('status', request("status"));
         }
         $projects = $query
-        ->orderBy($sortField,$sortDirection)
-        ->paginate(10)
-        ->onEachSide(1);
-       
-     return Inertia::render('Projects/Index', [
-    'projects' => ProjectResource::collection($projects),
-    'queryParams' => request()->query() ?: [], // <-- always an array
-]);
+            ->orderBy($sortField, $sortDirection)
+            ->paginate(10)
+            ->onEachSide(1);
 
+        return Inertia::render('Projects/Index', [
+            'projects' => ProjectResource::collection($projects),
+            'queryParams' => request()->query() ?: [], // <-- always an array
+        ]);
     }
 
     /**
@@ -48,13 +54,50 @@ class ProjectController extends Controller
         return Inertia::render('Projects/Create');
     }
 
+    private function handleImageUpload(Request $request, string $name, ?string $oldImage = null): ?string
+    {
+        if (!$request->hasFile('image_path')) {
+            return $oldImage;
+        }
+
+        // Delete old image if exists
+        if ($oldImage) {
+            Storage::disk('public')->delete($oldImage);
+        }
+
+        $slug = Str::slug($name);
+        $timestamp = now()->format('Ymd-His');
+        $extension = $request->file('image_path')->getClientOriginalExtension();
+        $filename = "{$slug}-{$timestamp}.{$extension}";
+
+        return $request->file('image_path')->storeAs('projects', $filename, 'public');
+    }
+
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreProjectRequest $request)
     {
-        //
+        // $project = ($request->validated());
+        // dd($project);
+
+        $data = $request->validated();
+
+        // Handle image upload
+        $data['image_path'] = $this->handleImageUpload($request, $data['name']);
+
+        // Set created_by
+        $data['created_by'] = Auth::id();
+
+        $project = Project::create($data);
+
+        return redirect()
+            ->route('projects.index', $project)
+            ->with('success', 'Project created successfully.');
     }
+
+
 
     /**
      * Display the specified resource.
@@ -62,7 +105,7 @@ class ProjectController extends Controller
     public function show(Project $project)
     {
         $query = $project->tasks();
-            $sortField = request("sort_field") ?? 'created_at';
+        $sortField = request("sort_field") ?? 'created_at';
         $sortDirection = request("sort_direction") ?? 'desc';
 
         if (request("name")) {
@@ -74,14 +117,14 @@ class ProjectController extends Controller
         }
 
         $tasks = $query
-        ->orderBy($sortField, $sortDirection)
-        ->paginate(10)
-        ->onEachSide(1);
-       return inertia('Projects/Show', [
-        'project' => new ProjectResource($project),
-         'tasks' => TaskResource::collection($tasks),
+            ->orderBy($sortField, $sortDirection)
+            ->paginate(10)
+            ->onEachSide(1);
+        return inertia('Projects/Show', [
+            'project' => new ProjectResource($project),
+            'tasks' => TaskResource::collection($tasks),
             'queryParams' => request()->query() ?: [], // <-- always an array
-       ]);
+        ]);
     }
 
     /**
@@ -105,6 +148,12 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        if ($project->image_path) {
+            Storage::disk('public')->delete($project->image_path);
+        }
+
+        $project->delete();
+
+        return to_route('projects.index')->with('success', 'Project deleted successfully.');
     }
 }

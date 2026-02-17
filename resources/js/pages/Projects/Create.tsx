@@ -27,9 +27,9 @@ const breadcrumbs: BreadcrumbItem[] = [
 type ProjectForm = {
     name: string;
     description: string;
-    status: 'pending' | 'in_progress' | 'completed' | '';
+    status: 'Pending' | 'In_Progress' | 'Completed' | '';
     due_date: string;
-    image: File | null;
+    image_path: File | null;
 };
 
 interface Flash {
@@ -40,12 +40,12 @@ interface Flash {
 export default function Create() {
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-    const { data, setData, post, processing, errors } = useForm<ProjectForm>({
+    const { data, setData, post, processing, reset, errors } = useForm<ProjectForm>({
+        image_path: null,
         name: '',
-        description: '',
         status: '',
+        description: '',
         due_date: '',
-        image: null,
     });
 
     const { flash } = usePage<{ flash: Flash }>().props;
@@ -57,7 +57,7 @@ export default function Create() {
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0] ?? null;
-        setData('image', file);
+        setData('image_path', file);
 
         if (file) {
             setImagePreview(URL.createObjectURL(file));
@@ -72,6 +72,17 @@ export default function Create() {
         post(route('projects.store'), {
             forceFormData: true, // important for file upload
         });
+    };
+
+    const handleReset = () => {
+        reset(); // resets all form fields to initial values
+        setImagePreview(null); // clear image preview
+
+        // Optional: clear file input manually
+        const fileInput = document.getElementById('image') as HTMLInputElement;
+        if (fileInput) {
+            fileInput.value = '';
+        }
     };
 
     return (
@@ -94,6 +105,14 @@ export default function Create() {
                 <section className="mx-auto w-full max-w-md rounded-lg bg-gray-100 p-6 shadow-sm dark:bg-gray-900">
                     <form className="flex flex-col gap-6" onSubmit={submit}>
                         <div className="grid gap-6">
+                            {/* Image Upload */}
+                            <div className="grid gap-2">
+                                <Label htmlFor="image">Project Image</Label>
+                                <Input id="image" type="file" onChange={handleFileChange} />
+                                {imagePreview && <img src={imagePreview} alt="Preview" className="mt-2 h-20 w-20 rounded-md object-cover" />}
+                                <InputError message={errors.image_path} />
+                            </div>
+
                             {/* Project Name */}
                             <div className="grid gap-2">
                                 <Label htmlFor="name">Project Name</Label>
@@ -127,9 +146,9 @@ export default function Create() {
                                         <SelectValue placeholder="Select status" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="pending">Pending</SelectItem>
-                                        <SelectItem value="in_progress">In Progress</SelectItem>
-                                        <SelectItem value="completed">Completed</SelectItem>
+                                        <SelectItem value="Pending">Pending</SelectItem>
+                                        <SelectItem value="In_Progress">In Progress</SelectItem>
+                                        <SelectItem value="Completed">Completed</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <InputError message={errors.status} />
@@ -142,19 +161,21 @@ export default function Create() {
                                 <InputError message={errors.due_date} />
                             </div>
 
-                            {/* Image Upload */}
-                            <div className="grid gap-2">
-                                <Label htmlFor="image">Project Image</Label>
-                                <Input id="image" type="file" onChange={handleFileChange} />
-                                {imagePreview && <img src={imagePreview} alt="Preview" className="mt-2 h-20 w-20 rounded-md object-cover" />}
-                                <InputError message={errors.image} />
-                            </div>
-
                             {/* Submit Button */}
-                            <Button type="submit" className="mt-4 w-full" disabled={processing}>
+                            {/* <Button type="submit" className="mt-4 w-full" disabled={processing}>
                                 {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                                 Store Project
-                            </Button>
+                            </Button> */}
+                            <div className="mt-4 flex gap-3">
+                                <Button type="button" variant="outline" className="w-[30%]" onClick={handleReset} disabled={processing}>
+                                    Reset
+                                </Button>
+
+                                <Button type="submit" className="w-full" disabled={processing}>
+                                    {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                                    Store Project
+                                </Button>
+                            </div>
                         </div>
                     </form>
                 </section>

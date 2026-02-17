@@ -23,20 +23,14 @@ class ProjectResource extends JsonResource
         'status' => $this->status,
         'created_by' => new UserResource($this->createdBy),
         'created_at' => (new Carbon($this->created_at))->format('Y-m-d'),
-        'due_date' => (new Carbon($this->due_date))->format('Y-m-d'),
+        'due_date' => $this->due_date
+    ? (new Carbon($this->due_date))->format('Y-m-d')
+    : null,
+
         'image_url' => $this->image_path
             ? asset('storage/' . $this->image_path)
             : asset('images/fallback.jpg'),  
-            // 'id' => $this->id,
-            // 'name' => $this->name,
-            // 'description' => $this->description,
-            // 'created_at' => (new Carbon ($this->created_at))->format
-            // ('Y-m-d'),
-            // 'due_date' => (new Carbon ($this->due_date))->format('Y-m-d'),
-            // 'status' => $this->status,
-            // 'image_path' => $this->image_path,
-            // 'created_by' => new UserResource($this->createdBy),
-            // 'updatedBy' => new UserResource($this->updatedBy),
+           
         ];
     }
 }
