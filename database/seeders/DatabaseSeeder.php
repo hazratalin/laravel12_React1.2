@@ -26,11 +26,11 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         // Project::factory()->count(30)->hasTasks(30)->create();
-       
 
-        //  Post::factory(3)->create();
 
+        // Post::factory(3)->create();
+
+        // $this->call(PermissionSeeder::class);
+        // php artisan db:seed
     }
-
-   
 }

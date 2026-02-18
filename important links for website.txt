@@ -4,3 +4,5 @@ https://ui.shadcn.com/docs/components/radix/textarea
 https://inertiajs.com/docs/v2/the-basics/forms
 https://lucide.dev/icons/
 https://heroicons.com/
+https://laravel.com/docs/12.x
+https://spatie.be/docs/laravel-permission/v7/installation-laravel

@@ -1,0 +1,121 @@
+
+
+composer require spatie/laravel-permission
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+
+npm install @heroicons/react -s
+php artisan storage:unlink
+php artisan storage:link
+php artisan db:seed
+
+
+
+
+
+
+
+how to install laravel12 with  react starter kit and also important libraries tel me step by step
+
+
+Here’s a step-by-step guide to installing Laravel 12 with the React starter kit, plus the important libraries most projects need.
+
+✅ 1️⃣ System Requirements
+
+Make sure you have:
+
+PHP 8.2+
+
+Composer
+
+Node.js 18+
+
+npm or yarn
+
+A database (MySQL / PostgreSQL / SQLite)
+
+Check versions:
+
+php -v
+composer -V
+node -v
+npm -v
+
+✅ 2️⃣ Install Laravel 12
+
+Install Laravel installer globally (optional but recommended):
+
+composer global require laravel/installer
+
+
+Create a new Laravel 12 project:
+
+laravel new my-app
+
+
+OR using Composer:
+
+composer create-project laravel/laravel my-app
+
+
+Go inside project:
+
+cd my-app
+
+✅ 3️⃣ Install React Starter Kit (Official Way)
+
+Laravel 12 uses Laravel Breeze for lightweight React setup.
+
+Install Breeze:
+
+composer require laravel/breeze --dev
+
+
+Install React stack:
+
+php artisan breeze:install react
+
+
+Install NPM dependencies:
+
+npm install
+
+
+Build frontend:
+
+npm run dev
+
+
+Run Laravel server:
+
+php artisan serve
+
+
+Now open:
+
+http://127.0.0.1:8000
+
+
+You now have:
+
+Laravel 12
+
+React
+
+Authentication (login/register)
+
+Tailwind CSS
+
+Vite
+
+✅ 4️⃣ Setup Database
+
+Edit .env file:
+
+DB_DATABASE=myapp
+DB_USERNAME=root
+DB_PASSWORD=yourpassword
+
+
+Then run:
+
+php artisan migrate

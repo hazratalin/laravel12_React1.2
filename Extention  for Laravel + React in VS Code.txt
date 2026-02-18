@@ -1,0 +1,29 @@
+How to Enable Suggestions for Laravel + React in VS Code
+✅ 1. Install These Extensions in VS Code
+PHP & Laravel (Backend)
+
+PHP Intelephense → Autocomplete, go to definition, etc.
+
+Laravel Extra Intellisense → Specific for Laravel facades, routes, config.
+
+Laravel Blade Snippets → Blade files (if any).
+
+Laravel Artisan (optional) → Run Artisan commands from VS Code.
+
+React + Inertia (Frontend)
+
+ES7+ React/Redux/React-Native Snippets → Fast component snippets + autocomplete.
+
+Prettier → Code formatting.
+
+JavaScript and TypeScript Nightly → Helps with modern syntax.
+
+Path Intellisense → Helps with auto-imports.
+
+
+Auto Rename Tag
+ESLint
+Live Preview
+Live Server
+Material Icon Theme
+My SQL
