@@ -41,11 +41,6 @@ export default function Show({ user }: Props) {
                 {/* User Card */}
                 <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg transition-colors duration-300 dark:bg-gray-800 dark:shadow-gray-900">
                     <div className="flex flex-col items-center">
-                        {/* <img
-                            src={user.image_url || '/images/fallback.jpg'}
-                            alt={user.name}
-                            className="mb-4 h-32 w-32 rounded-full border-4 border-indigo-600 object-cover dark:border-indigo-400"
-                        /> */}
                         <img
                             src={user.image_url || '/images/fallback.jpg'}
                             alt={user.name}

@@ -146,16 +146,17 @@ class ProjectController extends Controller
         $data = $request->validated();
 
         // Handle image upload (keep old image if none uploaded)
-        $data['image_path'] = $this->handleImageUpload(
-            $request,
-            $data['name'],
-            $project->image_path
-        );
+        // $data['image_path'] = $this->handleImageUpload(
+        //     $request,
+        //     $data['name'],
+        //     $project->image_path
+        // );
 
 
 
+        // $data['updated_by'] = Auth::id();
+        $data['image_path'] = $this->handleImageUpload($request, $data['name'] ?? $project->name, $project->image_path);
         $data['updated_by'] = Auth::id();
-
         $project->update($data);
 
         return to_route('projects.index')
