@@ -16,21 +16,26 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)->create();
+        // User::factory(10)->create();
 
         // User::factory()->create([
         //     'name' => 'Hazrat Ali',
         //     'email' => 'hazratalin@gmail.com',
-        //     'password' => bcrypt('12345678'),
+        //     'password' => bcrypt('1'),
         //     'email_verified_at' => time(),
         // ]);
 
-        // Project::factory()->count(30)->hasTasks(30)->create();
+        Project::factory()->count(30)->hasTasks(30)->create();
 
 
-        // Post::factory(3)->create();
+        Post::factory(3)->create();
 
         // $this->call(PermissionSeeder::class);
+
+        // $this->call([
+        //     InitialAdminSeeder::class,
+        // ]);
+
         // php artisan db:seed
     }
 }

@@ -19,12 +19,10 @@ class UserController extends Controller
 
 
         return Inertia::render("Users/Index", [
-    "users" => User::with('roles')->get()->map(function ($user) {
-        return $user->toArray(); // Ensures all accessors like image_url are included
-    }),
-]);
-
-
+            "users" => User::with('roles')->get()->map(function ($user) {
+                return $user->toArray(); // Ensures all accessors like image_url are included
+            }),
+        ]);
     }
 
     public function create()
@@ -54,13 +52,31 @@ class UserController extends Controller
         return to_route('users.index')->with('success', 'User created successfully.');
     }
 
+    // public function show(string $id)
+    // {
+    //     $user = User::findOrFail($id);
+
+    //     return Inertia::render('Users/Show', compact('user'));
+    // }
     public function show(string $id)
     {
-        $user = User::findOrFail($id);
+        $user = User::with('roles')->findOrFail($id);
 
-        return Inertia::render('Users/Show', compact('user'));
+        return Inertia::render('Users/Show', [
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'image_url' => $user->image ? asset('storage/' . $user->image) : null,
+                'roles' => $user->roles->map(fn($role) => [
+                    'id' => $role->id,
+                    'name' => $role->name,
+                ])->toArray(),
+                'created_at' => $user->created_at,
+                'updated_at' => $user->updated_at,
+            ]
+        ]);
     }
-
     public function edit(string $id)
     {
         $user = User::findOrFail($id);

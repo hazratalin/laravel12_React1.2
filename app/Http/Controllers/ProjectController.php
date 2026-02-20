@@ -132,7 +132,9 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        //
+        return Inertia::render('Projects/Edit', [
+            'project' => new ProjectResource($project),
+        ]);
     }
 
     /**
@@ -140,8 +142,26 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        //
+
+        $data = $request->validated();
+
+        // Handle image upload (keep old image if none uploaded)
+        $data['image_path'] = $this->handleImageUpload(
+            $request,
+            $data['name'],
+            $project->image_path
+        );
+
+
+
+        $data['updated_by'] = Auth::id();
+
+        $project->update($data);
+
+        return to_route('projects.index')
+            ->with('success', "Project '{$project->name}' updated successfully.");
     }
+
 
     /**
      * Remove the specified resource from storage.

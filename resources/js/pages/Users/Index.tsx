@@ -1,22 +1,14 @@
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-import { Head, Link, usePage, router } from '@inertiajs/react';
-import { Pencil, Plus, Trash2, Eye } from 'lucide-react';
+import { can } from '@/lib/can';
+import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Eye, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import Swal from 'sweetalert2';
-import { can } from '@/lib/can';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -71,17 +63,8 @@ export default function Index({ users }: { users: User[] }) {
     };
 
     const bgColors = useMemo(
-        () => [
-            'bg-blue-500',
-            'bg-green-500',
-            'bg-yellow-500',
-            'bg-red-500',
-            'bg-purple-500',
-            'bg-pink-500',
-            'bg-indigo-500',
-            'bg-emerald-500',
-        ],
-        []
+        () => ['bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-red-500', 'bg-purple-500', 'bg-pink-500', 'bg-indigo-500', 'bg-emerald-500'],
+        [],
     );
 
     return (
@@ -90,7 +73,7 @@ export default function Index({ users }: { users: User[] }) {
 
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex justify-end">
-                    {can('user-create') && (
+                    {can('users.create') && (
                         <Link
                             href={route('users.create')}
                             className="inline-flex items-center gap-1.5 rounded bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white transition hover:bg-indigo-700"
@@ -121,15 +104,14 @@ export default function Index({ users }: { users: User[] }) {
                                         <TableCell className="font-medium">{user.id}</TableCell>
                                         <TableCell>
                                             <img
-    src={user.image_url || '/images/fallback.jpg'}
-    onError={({ currentTarget }) => {
-        currentTarget.onerror = null;
-        currentTarget.src = '/images/fallback.jpg';
-    }}
-    alt={`Profile picture of ${user.name}`}
-    className="h-10 w-10 rounded-full object-cover transition-transform duration-500 ease-in-out hover:scale-150"
-/>
-
+                                                src={user.image_url || '/images/fallback.jpg'}
+                                                onError={({ currentTarget }) => {
+                                                    currentTarget.onerror = null;
+                                                    currentTarget.src = '/images/fallback.jpg';
+                                                }}
+                                                alt={`Profile picture of ${user.name}`}
+                                                className="h-10 w-10 rounded-full object-cover transition-transform duration-500 ease-in-out hover:scale-150"
+                                            />
 
                                             {/* <img
                                                 src={user.image}
@@ -146,8 +128,7 @@ export default function Index({ users }: { users: User[] }) {
                                         <TableCell className="flex flex-wrap gap-1">
                                             {user.roles.length > 0 ? (
                                                 user.roles.map((role, index) => {
-                                                    const bgColor =
-                                                        bgColors[index % bgColors.length];
+                                                    const bgColor = bgColors[index % bgColors.length];
                                                     return (
                                                         <span
                                                             key={role.id}
@@ -162,7 +143,7 @@ export default function Index({ users }: { users: User[] }) {
                                             )}
                                         </TableCell>
                                         <TableCell className="text-right">
-                                            {can('user-view') && (
+                                            {can('users.view') && (
                                                 <Link
                                                     href={route('users.show', user.id)}
                                                     className="mr-4 inline-flex items-center text-gray-500 hover:text-purple-600"
@@ -171,7 +152,7 @@ export default function Index({ users }: { users: User[] }) {
                                                     Show
                                                 </Link>
                                             )}
-                                            {can('user-edit') && (
+                                            {can('users.edit') && (
                                                 <Link
                                                     href={route('users.edit', user.id)}
                                                     className="mr-4 inline-flex items-center text-indigo-500 hover:text-indigo-600"
@@ -180,7 +161,7 @@ export default function Index({ users }: { users: User[] }) {
                                                     Edit
                                                 </Link>
                                             )}
-                                            {can('user-delete') && (
+                                            {can('users.delete') && (
                                                 <button
                                                     onClick={() => handleDelete(user.id)}
                                                     className="inline-flex cursor-pointer items-center text-red-500 hover:text-red-600"

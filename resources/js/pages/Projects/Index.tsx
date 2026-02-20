@@ -143,7 +143,7 @@ export default function Index({ projects, queryParams }: { projects: PaginatedPr
 
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex justify-end">
-                    {can('user-create') && (
+                    {can('users.create') && (
                         <Link
                             href={route('projects.create')}
                             className="inline-flex items-center gap-1.5 rounded bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white transition hover:bg-indigo-700"
