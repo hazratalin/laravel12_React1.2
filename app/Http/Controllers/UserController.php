@@ -2,22 +2,25 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
+
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Pest\Support\Str;
 
 class UserController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        // return Inertia::render("Users/Index", [
-        //     "users" => User::with('roles')->get()
-        // ]);
-
-
         return Inertia::render("Users/Index", [
             "users" => User::with('roles')->get()->map(function ($user) {
                 return $user->toArray(); // Ensures all accessors like image_url are included
@@ -25,6 +28,9 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
         return Inertia::render('Users/Create', [
@@ -32,7 +38,10 @@ class UserController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreUserRequest $request)
     {
         $data = $request->validate([
             'name'     => 'required|string|max:255',
@@ -52,13 +61,10 @@ class UserController extends Controller
         return to_route('users.index')->with('success', 'User created successfully.');
     }
 
-    // public function show(string $id)
-    // {
-    //     $user = User::findOrFail($id);
-
-    //     return Inertia::render('Users/Show', compact('user'));
-    // }
-    public function show(string $id)
+    /**
+     * Display the specified resource.
+     */
+    public function show(User $user, string $id)
     {
         $user = User::with('roles')->findOrFail($id);
 
@@ -77,7 +83,11 @@ class UserController extends Controller
             ]
         ]);
     }
-    public function edit(string $id)
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(User $user, string $id)
     {
         $user = User::findOrFail($id);
 
@@ -88,7 +98,10 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(Request $request, string $id)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateUserRequest $request, User $user, string $id)
     {
         $user = User::findOrFail($id);
 
@@ -115,6 +128,9 @@ class UserController extends Controller
         return to_route('users.index')->with('success', 'User updated successfully.');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(User $user)
     {
         // Optional: Prevent user from deleting themselves

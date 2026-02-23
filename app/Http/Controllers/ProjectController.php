@@ -23,6 +23,8 @@ class ProjectController extends Controller
      */
     public function index()
     {
+
+        // php artisan make:controller UserController --model=User --requests --resource
         $query = Project::query();
 
         $sortField = request("sort_field") ?? 'created_at';
