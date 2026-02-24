@@ -79,7 +79,7 @@ export default function Index({ users }: { users: User[] }) {
                             className="inline-flex items-center gap-1.5 rounded bg-indigo-600 px-2.5 py-1.5 text-xs font-medium text-white transition hover:bg-indigo-700"
                         >
                             <Plus className="h-3.5 w-3.5" />
-                            Create User
+                            Add New
                         </Link>
                     )}
                 </div>

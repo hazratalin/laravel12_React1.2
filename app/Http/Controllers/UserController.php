@@ -43,15 +43,8 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        $data = $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|string|min:1',
-            'image'    => 'nullable|image',
-            'roles'    => 'required|array',
-            'roles.*'  => 'string|exists:roles,name',
-        ]);
 
+        $data = $request->validated();
         $data['password'] = Hash::make($data['password']);
         $data['image'] = $this->handleImageUpload($request, $data['name']);
 
@@ -64,16 +57,18 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user, string $id)
+    public function show(User $user)
     {
-        $user = User::with('roles')->findOrFail($id);
+        $user->load('roles');
 
         return Inertia::render('Users/Show', [
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'image_url' => $user->image ? asset('storage/' . $user->image) : null,
+                'image_url' => $user->image
+                    ? asset('storage/' . $user->image)
+                    : null,
                 'roles' => $user->roles->map(fn($role) => [
                     'id' => $role->id,
                     'name' => $role->name,
@@ -87,10 +82,8 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user, string $id)
+    public function edit(User $user)
     {
-        $user = User::findOrFail($id);
-
         return Inertia::render('Users/Edit', [
             "user"      => $user,
             "roles"     => Role::pluck("name"),
@@ -101,19 +94,10 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user, string $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $user = User::findOrFail($id);
 
-        $data = $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:1',
-            'image'    => 'nullable|image',
-            'roles'    => 'required|array',
-            'roles.*'  => 'string|exists:roles,name',
-        ]);
-
+        $data = $request->validated();
         $data['image'] = $this->handleImageUpload($request, $data['name'], $user->image);
 
         if ($request->filled('password')) {
