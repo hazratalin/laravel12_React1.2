@@ -9,12 +9,9 @@ use Inertia\Inertia;
 use App\Http\Resources\ProjectResource;
 use App\Http\Resources\TaskResource;
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-
-
 
 class ProjectController extends Controller
 {
@@ -148,15 +145,6 @@ class ProjectController extends Controller
         $data = $request->validated();
 
         // Handle image upload (keep old image if none uploaded)
-        // $data['image_path'] = $this->handleImageUpload(
-        //     $request,
-        //     $data['name'],
-        //     $project->image_path
-        // );
-
-
-
-        // $data['updated_by'] = Auth::id();
         $data['image_path'] = $this->handleImageUpload($request, $data['name'] ?? $project->name, $project->image_path);
         $data['updated_by'] = Auth::id();
         $project->update($data);

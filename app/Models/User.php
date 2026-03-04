@@ -12,7 +12,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Storage;
 
 // class User extends Authenticatable implements MustVerifyEmail
-class User extends Authenticatable 
+class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
@@ -26,7 +26,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-         'image',
+        'image',
     ];
 
     /**
@@ -57,14 +57,16 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
+    public function assignedTasks()
+    {
+        return $this->hasMany(Task::class, 'assigned_user_id');
+    }
+
     public function getImageUrlAttribute()
-        {
-            return $this->image ? asset(Storage::url($this->image)) : null;
-        }
+    {
+        return $this->image ? asset(Storage::url($this->image)) : null;
+    }
 
 
-            protected $appends = ['image_url'];
-
-
-
+    protected $appends = ['image_url'];
 }

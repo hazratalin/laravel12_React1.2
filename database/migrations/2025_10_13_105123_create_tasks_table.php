@@ -18,10 +18,10 @@ return new class extends Migration
             $table->string('image_path')->nullable();
             $table->string('status');
             $table->string('priority');
-            $table->string('due_date')->nullable();
-            $table->foreignId('assigned_user_id')->constrained('users');
-            $table->foreignId('created_by')->constrained('users');
-            $table->foreignId('updated_by')->constrained('users');
+            $table->date('due_date')->nullable();
+            $table->foreignId('assigned_user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
             $table->timestamps();
         });

@@ -1,24 +1,24 @@
-import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from '@/constants';
+import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from '@/constants';
 import AppLayout from '@/layouts/app-layout';
-import { type Project } from '@/types';
+import { type Task } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import TasksTable from '../Tasks/TasksTable';
-export default function Show({ tasks, queryParams, project }: { project: Project }) {
+import TasksTable from './TasksTable';
+export default function Show({ tasks, queryParams, task }: { task: Task }) {
     return (
         <AppLayout
             breadcrumbs={[
-                { title: 'Projects', href: '/projects' },
-                { title: project.name, href: '#' },
+                { title: 'Tasks', href: '/tasks' },
+                { title: task.name, href: '#' },
             ]}
         >
-            <Head title={project.name} />
+            <Head title={task.name} />
 
             <div className="flex justify-center p-6">
                 <div className="w-full max-w-5xl overflow-hidden rounded-xl border bg-white shadow-md dark:border-gray-700 dark:bg-gray-900">
                     {/* 🔹 Cover Image */}
                     <div className="h-64 w-full overflow-hidden">
                         <img
-                            src={project.image_path || '/images/fallback.jpg'}
+                            src={task.image_path || '/images/fallback.jpg'}
                             onError={(e) => (e.currentTarget.src = '/images/fallback.jpg')}
                             className="h-full w-full object-cover"
                         />
@@ -26,9 +26,9 @@ export default function Show({ tasks, queryParams, project }: { project: Project
 
                     {/* 🔹 Content */}
                     <div className="space-y-6 p-6">
-                        {/* Project Name */}
+                        {/* Task Name */}
                         <div>
-                            <h1 className="text-3xl font-bold text-gray-800 dark:text-white">{project.name}</h1>
+                            <h1 className="text-3xl font-bold text-gray-800 dark:text-white">{task.name}</h1>
                         </div>
 
                         {/* Details */}
@@ -36,33 +36,33 @@ export default function Show({ tasks, queryParams, project }: { project: Project
                             <div>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">Status</p>
                                 <p className="font-medium text-gray-800 dark:text-gray-200">
-                                    <span className={`rounded-md px-2 py-0.5 ${PROJECT_STATUS_CLASS_MAP[project.status]}`}>
-                                        {PROJECT_STATUS_TEXT_MAP[project.status]}
+                                    <span className={`rounded-md px-2 py-0.5 ${TASK_STATUS_CLASS_MAP[task.status]}`}>
+                                        {TASK_STATUS_TEXT_MAP[task.status]}
                                     </span>
                                 </p>
                             </div>
 
                             <div>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">Created By</p>
-                                <p className="font-medium text-gray-800 dark:text-gray-200">{project.created_by?.name}</p>
+                                <p className="font-medium text-gray-800 dark:text-gray-200">{task.created_by?.name}</p>
                             </div>
 
                             <div>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">Created At</p>
-                                <p className="font-medium text-gray-800 dark:text-gray-200">{new Date(project.created_at).toLocaleDateString()}</p>
+                                <p className="font-medium text-gray-800 dark:text-gray-200">{new Date(task.created_at).toLocaleDateString()}</p>
                             </div>
 
                             <div>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">Due Date</p>
-                                <p className="font-medium text-gray-800 dark:text-gray-200">{new Date(project.due_date).toLocaleDateString()}</p>
+                                <p className="font-medium text-gray-800 dark:text-gray-200">{new Date(task.due_date).toLocaleDateString()}</p>
                             </div>
                         </div>
 
                         {/* Description */}
-                        {project.description && (
+                        {task.description && (
                             <div>
                                 <p className="text-sm text-gray-500 dark:text-gray-400">Description</p>
-                                <p className="mt-2 leading-relaxed text-gray-700 dark:text-gray-300">{project.description}</p>
+                                <p className="mt-2 leading-relaxed text-gray-700 dark:text-gray-300">{task.description}</p>
                             </div>
                         )}
                     </div>
@@ -70,14 +70,14 @@ export default function Show({ tasks, queryParams, project }: { project: Project
                     {/* 🔹 Footer */}
                     <div className="flex justify-end gap-3 border-t bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
                         <Link
-                            href="/projects"
+                            href="/tasks"
                             className="rounded bg-gray-200 px-4 py-2 text-sm hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
                         >
                             Back
                         </Link>
 
                         {/* <Link
-                            href={route('projects.edit', project.id)}
+                            href={route('tasks.edit', task.id)}
                             className="rounded bg-indigo-600 px-4 py-2 text-sm text-white hover:bg-indigo-700"
                         >
                             Edit
@@ -87,7 +87,7 @@ export default function Show({ tasks, queryParams, project }: { project: Project
             </div>
             <div className="flex justify-center p-12">
                 <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
-                    <TasksTable tasks={tasks} queryParams={queryParams} hideProjectColumn={true} />
+                    <TasksTable tasks={tasks} queryParams={queryParams} hideTaskColumn={true} />
                 </div>
             </div>
         </AppLayout>
@@ -95,7 +95,7 @@ export default function Show({ tasks, queryParams, project }: { project: Project
 }
 
 // import AppLayout from '@/layouts/app-layout';
-// import { type BreadcrumbItem, type Project } from '@/types';
+// import { type BreadcrumbItem, type Task } from '@/types';
 // import { Head } from '@inertiajs/react';
 
 // /* ----------------------------------
@@ -103,25 +103,25 @@ export default function Show({ tasks, queryParams, project }: { project: Project
 // -----------------------------------*/
 // const breadcrumbs: BreadcrumbItem[] = [
 //     {
-//         title: 'Projects',
-//         href: '/projects',
+//         title: 'Tasks',
+//         href: '/tasks',
 //     },
 // ];
 
-// export default function Show({ project }: { project: Project }) {
+// export default function Show({ task }: { task: Task }) {
 //     return (
 //         <AppLayout breadcrumbs={breadcrumbs}>
-//             <Head title={project?.name ? `${project.name} — Project` : 'Project'} />
+//             <Head title={task?.name ? `${task.name} — Task` : 'Task'} />
 
 //             <header className="rounded-xl p-4">
-//                 <h1 className="text-2xl font-bold">{project?.name ?? 'Project'}</h1>
+//                 <h1 className="text-2xl font-bold">{task?.name ?? 'Task'}</h1>
 //             </header>
 
 //             <main className="relative flex-1 overflow-hidden rounded-xl border">
 //                 <div>
 //                     <img
-//                         src={project?.image_path || '/images/fallback.jpg'}
-//                         alt={project?.name ?? 'Project image'}
+//                         src={task?.image_path || '/images/fallback.jpg'}
+//                         alt={task?.name ?? 'Task image'}
 //                         onError={(e) => (e.currentTarget.src = '/images/fallback.jpg')}
 //                         className="h-64 w-full object-cover"
 //                     />
@@ -131,8 +131,8 @@ export default function Show({ tasks, queryParams, project }: { project: Project
 //                     <div>
 //                         <dl>
 //                             <div>
-//                                 <dt className="text-lg font-bold">Project ID</dt>
-//                                 <dd className="mt-1">{project.id}</dd>
+//                                 <dt className="text-lg font-bold">Task ID</dt>
+//                                 <dd className="mt-1">{task.id}</dd>
 //                             </div>
 //                         </dl>
 //                     </div>

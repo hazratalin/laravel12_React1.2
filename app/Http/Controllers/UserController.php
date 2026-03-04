@@ -45,6 +45,7 @@ class UserController extends Controller
     {
 
         $data = $request->validated();
+        // $data['email_verified_at'] = time();
         $data['password'] = Hash::make($data['password']);
         $data['image'] = $this->handleImageUpload($request, $data['name']);
 
@@ -98,6 +99,7 @@ class UserController extends Controller
     {
 
         $data = $request->validated();
+
         $data['image'] = $this->handleImageUpload($request, $data['name'], $user->image);
 
         if ($request->filled('password')) {

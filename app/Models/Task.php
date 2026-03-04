@@ -10,6 +10,23 @@ class Task extends Model
     /** @use HasFactory<\Database\Factories\TaskFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'description',
+        'due_date',
+        'status',
+        'priority',
+        'image_path',
+        'project_id',
+        'assigned_user_id',
+        'created_by',
+        'updated_by',
+    ];
+
+    protected $casts = [
+        'due_date' => 'date',
+    ];
+
     public function project()
     {
         return $this->belongsTo(Project::class);
@@ -19,6 +36,11 @@ class Task extends Model
     {
         return $this->belongsTo(User::class, 'assigned_user_id');
     }
+
+    // public function assignedTasks()
+    // {
+    //     return $this->hasMany(Task::class, 'assigned_user_id');
+    // }
 
     public function createdBy()
     {
