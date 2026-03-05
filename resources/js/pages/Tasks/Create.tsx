@@ -231,10 +231,7 @@ export default function Create({ projects, users }: CreateProps) {
                             </div>
 
                             {/* Submit Button */}
-                            {/* <Button type="submit" className="mt-4 w-full" disabled={processing}>
-                                {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                                Store Task
-                            </Button> */}
+
                             <div className="mt-4 flex gap-3">
                                 <Button type="button" variant="outline" className="w-[30%]" onClick={handleReset} disabled={processing}>
                                     Reset

@@ -22,7 +22,15 @@ class UpdateTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "image_path" => "nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048",
+            "name" => "required|string|max:255",
+            "status" => "required|in:Pending,In_Progress,Completed",
+            "priority" => "required|in:Low,Medium,High",
+            "project_id" => "required|exists:projects,id",
+            "assigned_user_id" => "nullable|exists:users,id",
+
+            "description" => "nullable|string",
+            "due_date" => "nullable|date",
         ];
     }
 }

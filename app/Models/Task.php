@@ -37,11 +37,6 @@ class Task extends Model
         return $this->belongsTo(User::class, 'assigned_user_id');
     }
 
-    // public function assignedTasks()
-    // {
-    //     return $this->hasMany(Task::class, 'assigned_user_id');
-    // }
-
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');

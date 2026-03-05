@@ -57,7 +57,7 @@ class TaskController extends Controller
     public function create()
     {
         $projects = Project::query()->orderBy('name', 'asc')->get();
-        $users = User::all();
+        $users = User::query()->orderBy('name', 'asc')->get();
         return Inertia::render('Tasks/Create', [
             'projects' => ProjectResource::collection($projects),
             'users' => UserResource::collection($users),
@@ -104,57 +104,49 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Task $task)
-    {
-        $query = $task->tasks();
-        $sortField = request("sort_field") ?? 'created_at';
-        $sortDirection = request("sort_direction") ?? 'desc';
-
-        if (request("name")) {
-            $query->where('name', 'like', '%' . request("name") . '%');
-        }
-
-        if (request("status")) {
-            $query->where('status', request("status"));
-        }
-
-        $tasks = $query
-            ->orderBy($sortField, $sortDirection)
-            ->paginate(10)
-            ->onEachSide(1);
-        return inertia('Tasks/Show', [
-            'task' => new TaskResource($task),
-            'tasks' => TaskResource::collection($tasks),
-            'queryParams' => request()->query() ?: [], // <-- always an array
-        ]);
-    }
+    public function show(Task $task) {}
 
     /**
      * Show the form for editing the specified resource.
      */
+
     public function edit(Task $task)
     {
+        $projects = Project::query()->orderBy('name', 'asc')->get();
+        $users = User::query()->orderBy('name', 'asc')->get();
         return Inertia::render('Tasks/Edit', [
             'task' => new TaskResource($task),
+            'projects' => ProjectResource::collection($projects),
+            'users' => UserResource::collection($users),
+
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
+
     public function update(UpdateTaskRequest $request, Task $task)
     {
         $data = $request->validated();
 
-        // Handle image upload (keep old image if none uploaded)
-        $data['image_path'] = $this->handleImageUpload($request, $data['name'] ?? $task->name, $task->image_path);
+        // Handle image upload (replace old image if new uploaded)
+        $data['image_path'] = $this->handleImageUpload(
+            $request,
+            $data['name'] ?? $task->name,
+            $task->image_path
+        );
+
+        // track updater
         $data['updated_by'] = Auth::id();
+
+        // update task
         $task->update($data);
 
-        return to_route('tasks.index')
+        return redirect()
+            ->route('tasks.index')
             ->with('success', "Task '{$task->name}' updated successfully.");
     }
-
     /**
      * Remove the specified resource from storage.
      */
