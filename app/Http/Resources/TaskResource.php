@@ -22,8 +22,6 @@ class TaskResource extends JsonResource
                 'id' => $this->id,
                 'name' => $this->name,
                 'description' => $this->description,
-                'created_at' => $this->created_at?->format('Y-m-d'),
-                'due_date' => $this->due_date?->format('Y-m-d'),
                 'status' => $this->status,
                 'priority' => $this->priority,
                 'image_path' => $this->image_path
@@ -34,7 +32,9 @@ class TaskResource extends JsonResource
                 'project' => new ProjectResource($this->project),
                 'assignedUser' => $this->assignedUser ? new UserResource($this->assignedUser) : null,
                 'created_by' => new UserResource($this->createdBy),
-                'updatedBy' => new UserResource($this->updatedBy),
+                'updated_by' => new UserResource($this->updatedBy),
+                'created_at' => $this->created_at?->format('Y-m-d'),
+                'due_date' => $this->due_date?->format('Y-m-d'),
             ];
     }
 }

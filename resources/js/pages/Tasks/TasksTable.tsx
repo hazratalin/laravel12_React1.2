@@ -220,8 +220,11 @@ export default function TasksTable({ tasks, queryParams = null, hideProjectColum
                                         />
                                     </TableCell>
                                     {!hideProjectColumn && <TableCell>{task.project?.name}</TableCell>}
-                                    <TableCell>{task.name}</TableCell>
+                                    {/* <TableCell>{task.name}</TableCell> */}
 
+                                    <TableCell className="hover:underline">
+                                        <Link href={route('tasks.show', task.id)}>{task.name}</Link>
+                                    </TableCell>
                                     <TableCell>
                                         <span
                                             className={`inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-medium text-white ${TASK_STATUS_CLASS_MAP[task.status]}`}
