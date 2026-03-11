@@ -227,7 +227,7 @@ export default function TasksTable({ tasks, queryParams = null, hideProjectColum
                                     </TableCell>
                                     <TableCell>
                                         <span
-                                            className={`inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-medium text-white ${TASK_STATUS_CLASS_MAP[task.status]}`}
+                                            className={`inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-medium text-nowrap text-white ${TASK_STATUS_CLASS_MAP[task.status]}`}
                                         >
                                             {TASK_STATUS_TEXT_MAP[task.status]}
                                         </span>

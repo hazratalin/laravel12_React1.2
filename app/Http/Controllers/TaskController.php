@@ -3,19 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\User;
+use App\Models\Project;
+
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
-use App\Http\Resources\ProjectResource;
+
 use Inertia\Inertia;
+
 use App\Http\Resources\TaskResource;
 use App\Http\Resources\UserResource;
-use App\Models\Project;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use App\Http\Resources\ProjectResource;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+
+use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
@@ -166,5 +170,33 @@ class TaskController extends Controller
         $task->delete();
 
         return to_route('tasks.index')->with('success', "Task '{$name}' deleted successfully.");
+    }
+
+    public function myTasks()
+    {
+        $user = auth()->user();
+        $query = Task::with(['project', 'assignedUser', 'createdBy', 'updatedBy'])
+            ->where('assigned_user_id',  $user?->id);
+
+        $sortField = request("sort_field") ?? 'created_at';
+        $sortDirection = request("sort_direction") ?? 'desc';
+
+        if (request("name")) {
+            $query->where('name', 'like', '%' . request("name") . '%');
+        }
+
+        if (request("status")) {
+            $query->where('status', request("status"));
+        }
+
+        $tasks = $query
+            ->orderBy($sortField, $sortDirection)
+            ->paginate(10)
+            ->onEachSide(1);
+
+        return Inertia::render('Tasks/Index', [
+            'tasks' => TaskResource::collection($tasks),
+            'queryParams' => request()->query() ?: [], // <-- always an array
+        ]);
     }
 }

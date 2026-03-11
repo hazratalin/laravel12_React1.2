@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
@@ -16,11 +17,14 @@ Route::get('/posts-home', [PostController::class, 'indexHome'])->name('posts.hom
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::get('dashboard', fn() => Inertia::render('dashboard'))->name('dashboard');
+    // Route::get('dashboard', fn() => Inertia::render('dashboard'))->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('projects', ProjectController::class);
 
     Route::resource('tasks', TaskController::class);
+
+    Route::get('my-tasks', [TaskController::class, 'myTasks'])->name('tasks.my-tasks');
 
     Route::resource('posts', PostController::class);
     // Users Routes
