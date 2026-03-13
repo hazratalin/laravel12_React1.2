@@ -4,8 +4,8 @@ import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from '@/constants';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
+import Chart from 'react-apexcharts';
 import CountUp from 'react-countup';
-
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
@@ -44,6 +44,48 @@ export default function Dashboard({
     // ✅ Safe default array for tasks
     const tasks = activeTasks ?? [];
 
+    const chartOptions = {
+        chart: {
+            type: 'bar',
+            toolbar: {
+                show: false,
+            },
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '40%',
+                borderRadius: 6,
+                distributed: true, // ✅ each column different color
+            },
+        },
+
+        grid: {
+            borderColor: '#e5e7eb',
+        },
+        yaxis: {
+            labels: {
+                style: {
+                    colors: '#6b7280',
+                },
+            },
+        },
+
+        dataLabels: {
+            enabled: false,
+        },
+        xaxis: {
+            categories: ['Pending', 'In Progress', 'Completed'],
+        },
+        colors: ['#eab308', '#3b82f6', '#22c55e'], // yellow, blue, green
+    };
+
+    const chartSeries = [
+        {
+            name: 'Tasks',
+            data: [pendingTasksCount, inProgressTasksCount, completedTasksCount],
+        },
+    ];
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
@@ -173,8 +215,9 @@ export default function Dashboard({
                 </div>
 
                 <div className="rounded-xl border p-6">
-                    <h2 className="mb-2 text-lg font-semibold">Active Task</h2>
-                    <p className="text-gray-500">Here you can show recent tasks or charts later.</p>
+                    <h2 className="mb-4 text-lg font-semibold">Task Status Overview</h2>
+
+                    <Chart options={chartOptions} series={chartSeries} type="bar" height={260} />
                 </div>
             </div>
         </AppLayout>

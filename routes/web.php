@@ -8,10 +8,13 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\HomeController;
 
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Route::get('/', function () {
+//     return Inertia::render('welcome');
+// })->name('home');
 
 Route::get('/posts-home', [PostController::class, 'indexHome'])->name('posts.home');
 

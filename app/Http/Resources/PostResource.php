@@ -19,7 +19,7 @@ class PostResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'content' => $this->content,
-            'image'=> asset(Storage::url($this->image)),
+            'image' => $this->image ? Storage::url($this->image) : '/images/fallback.jpg',
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

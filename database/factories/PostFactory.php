@@ -21,7 +21,7 @@ class PostFactory extends Factory
             'content' => fake()->text(),
             'title' => fake()->sentence(),
             'slug' => fake()->slug(),
-            'image' => 'posts/default.png',
+            'image' => 'posts/fallback.jpg',
         ];
     }
 }

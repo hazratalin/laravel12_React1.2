@@ -24,9 +24,14 @@ class TaskResource extends JsonResource
                 'description' => $this->description,
                 'status' => $this->status,
                 'priority' => $this->priority,
-                'image_path' => $this->image_path
-                    ? Storage::url($this->image_path)
-                    : null,
+                // 'image_path' => $this->image_path
+                //     ? Storage::url($this->image_path)
+                //     : null,
+
+                'image' => $this->image
+                    ? asset('storage/' . $this->image)
+                    : asset('images/fallback.jpg'),
+
                 'project_id' => $this->project_id,
                 'assigned_user_id' => $this->assigned_user_id,
                 'project' => new ProjectResource($this->project),
