@@ -24,10 +24,6 @@ class PostController extends Controller
 
         $posts = Post::latest()->orderby('id', 'desc')->paginate(8);
 
-        // if ($posts->count() > 0) {
-        //     dd(asset('storage/' . $posts[0]->image));
-        // }
-
         // If it's an AJAX request, return JSON (for infinite scroll)
         if ($request->wantsJson()) {
             return response()->json($posts);
