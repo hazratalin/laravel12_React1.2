@@ -4,14 +4,13 @@ composer require spatie/laravel-permission
 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
 
 npm install @heroicons/react -s
-php artisan storage:unlink
-php artisan storage:link
-php artisan db:seed
-
+npm install axios framer-motion react-icons
 npm install react-countup
 npm install apexcharts react-apexcharts
 
-
+php artisan storage:unlink
+php artisan storage:link
+php artisan db:seed
 
 
 how to install laravel12 with  react starter kit and also important libraries tel me step by step
@@ -23,7 +22,7 @@ Here’s a step-by-step guide to installing Laravel 12 with the React starter ki
 
 Make sure you have:
 
-PHP 8.2+
+PHP 8.2+      
 
 Composer
 
@@ -39,8 +38,9 @@ php -v
 composer -V
 node -v
 npm -v
+laravel --version
 
-✅ 2️⃣ Install Laravel 12
+✅ 2️⃣ Install Laravel 12 with react
 
 Install Laravel installer globally (optional but recommended):
 
@@ -88,7 +88,8 @@ npm run dev
 Run Laravel server:
 
 php artisan serve
-
+    OR
+composer run dev
 
 Now open:
 
@@ -119,3 +120,5 @@ DB_PASSWORD=yourpassword
 Then run:
 
 php artisan migrate
+
+
